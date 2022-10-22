@@ -64,7 +64,7 @@ const SendFundsModal = ({ showSendFundsModal, setShowSendFundsModal, balance }) 
         // sign the transaction use wallet;
         const signedTxn = await hmy.wallet.signTransaction(txn);
         const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
-        console.log(txnHash.result);
+        console.log('txn hash',txnHash);
       }
       
     

@@ -1,4 +1,3 @@
-
 // images 
 import verifyIcon from '../../assests/icon/verify.png'
 import twitterIcon from "../../assests/social-icons/twitter.png"
