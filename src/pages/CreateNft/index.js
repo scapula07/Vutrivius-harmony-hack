@@ -15,13 +15,13 @@ import { collection, setDoc,doc,getDoc,addDoc} from  'firebase/firestore'
 import { db } from '../../firebase';
 const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
-export const marketplace_contract_Address="0x11f1eF9fcf19C74f3e05e0f3560e4875E7aa2489"
-export const collection_contract_Address="0xB3F83F090856e1cb7ae3c1fb4426757C6Caeed7a"
+export const marketplace_contract_Address="0x83297Ec9e277F712871CbB3012FDDae3b3E6D7c4"
+export const collection_contract_Address="0x1707bF4593729Cf7D52953590c70Ae2D40cC82AE"
 
 
 export default function CreateNft() {
 
-    const web3 = new Web3(window.ethereum)
+    
     const privateKey =useRecoilValue(PkState)
     const account=useRecoilValue(AccountState)
     const pk = new PrivateKey(new HttpProvider('https://api.s0.b.hmny.io'), privateKey,2)
@@ -32,7 +32,20 @@ export default function CreateNft() {
       src: "",
       alt: "upload an image",
     });
-  const [tokenid,setID]=useState("")
+
+    const web3 = new Web3(window.ethereum)
+    const CollectionContract = new web3.eth.Contract(
+      erc721V3xAbi,
+      "0xB3F83F090856e1cb7ae3c1fb4426757C6Caeed7a"
+    )
+    const marketContract = new web3.eth.Contract(
+      marketPlaceAbi,
+      "0x11f1eF9fcf19C74f3e05e0f3560e4875E7aa2489"
+    )
+
+
+  const [tokenid,setID]=useState("1")
+  const [itemid,setItemID]=useState("1")
   const [itemName,setName]=useState("")
   const [collectionName,setCName]=useState("")
   const [price,setPrice]=useState("")
@@ -49,10 +62,7 @@ export default function CreateNft() {
   const NftMarketplaceContract = new HRC721(marketplace_contract_Address,marketPlaceAbi,pk)
   const NftCollectionContract = new HRC721(contractAddress,erc721V3xAbi,pk)
   
-  const marketPlaceContract = new web3.eth.Contract(
-   erc721V3xAbi,
-   contractAddress
-)
+
   const listNft=async()=>{
      const id =Number(tokenid)
      const itemPrice=Number(price)
@@ -66,18 +76,19 @@ export default function CreateNft() {
          gasLimit:3500000,
          value: toWei(fee, 'one')
        }
-      
+       
        )
    
      console.log(tx,"ttttttttt")
      toast(`Transaction successful
      Transaction Hash: ${tx.receipt?.transactionHash}
       `)
-
-      const docRef = await addDoc(collection(db, "pools"), {
+      // marketContract.events.Offered({})
+      //   .on("data",event=>console.log(event,"evvv"))
+      const docRef = await addDoc(collection(db, "collections"), {
           title:itemName,
           tokenid:tokenid,
-          itemid:"",
+          itemid:itemid,
           contractAddress:contractAddress,
           imgUrl:ImgUrl,
           owner:account,
@@ -111,6 +122,9 @@ export default function CreateNft() {
       toast(`Transaction successful
       Transaction Hash: ${tx.receipt?.transactionHash}
        `)
+
+      //  CollectionContract.events.TokenID({})
+      //  .on("data",event=>console.log(event))
       }catch(e){
       console.log(e)
       toast(e.message)

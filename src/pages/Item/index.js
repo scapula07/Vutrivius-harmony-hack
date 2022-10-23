@@ -21,9 +21,8 @@ import {AiOutlineCloseCircle } from "react-icons/ai"
 const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
 
-
-export const marketplace_contract_Address="0x11f1eF9fcf19C74f3e05e0f3560e4875E7aa2489"
-export const collection_contract_Address="0xB3F83F090856e1cb7ae3c1fb4426757C6Caeed7a"
+export const marketplace_contract_Address="0x83297Ec9e277F712871CbB3012FDDae3b3E6D7c4"
+export const collection_contract_Address="0x1707bF4593729Cf7D52953590c70Ae2D40cC82AE"
 
 export default function Item() {
 
@@ -37,7 +36,7 @@ export default function Item() {
     const location =useLocation()
     const [locationState,setlocationState] = useState(location.state)
     const [trigger,setTrigger] =useState(false)
-    const [purchase,setPurchased] =useState(true)
+    const [purchase,setPurchased] =useState(false)
     const [token,setToken]=useState("")
 
     const NftMarketplaceContract = new HRC721(marketplace_contract_Address,marketPlaceAbi,pk)
@@ -51,8 +50,8 @@ export default function Item() {
        if(token=="one"){
           console.log("one")
           try{
-       
-            const tx = await NftMarketplaceContract.send("purchaseItemWithONE", [1],
+            toast("Processing Transactions")
+            const tx = await NftMarketplaceContract.send("purchaseItemWithONE", [4],
             {
               gasPrice:new Unit("100").asGwei().toWei(),
               gasLimit:3500000,
@@ -62,6 +61,11 @@ export default function Item() {
             )
            
           console.log(tx,"ttttttttt")
+          
+          console.log(tx,"ttttttttt")
+          toast(`Transaction successful
+          Transaction Hash: ${tx.receipt?.transactionHash}
+           `)
           setToken("")
           setPurchased(true)
            }catch(e){
@@ -72,6 +76,7 @@ export default function Item() {
          console.log("v3t")
          
          try{
+            toast("Processing Transactions")
             const feeOne =Number(locationState.item?.price)*4
             const tx = await NftMarketplaceContract.send("purchaseItemWithToken", [1,feeOne ,"0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F"],
             {
@@ -201,9 +206,11 @@ export default function Item() {
 
            <main className='w-full pt-4 '>
              <button className='btn-color rounded-md w-full text-black py-1 flex justify-center space-x-4 items-center '
-               onClick={purchaseItem}
+              
              >
-               <span>Complete purchase</span>
+               <span
+                  onClick={purchaseItem}
+               >Complete purchase</span>
                <select name="cars" id="cars" className='text-xs text-slate-600 btn-color outline-none'
                  onChange={(e)=>setToken(e.target.value)}
                >

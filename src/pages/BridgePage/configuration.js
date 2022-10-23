@@ -11,5 +11,5 @@ export var harrpc = "https://api.s0.b.hmny.io";
 
 export var ethErc20 = "";
 export var ethCustody = "";
-export var ethNFT = "";
+export var ethNFT = "0x2aF480B4ceDb5550EeeB5F303D5aD5caAF570C20";
 export var ethrpc = "https://rpc.ankr.com/eth_goerli";
