@@ -10,15 +10,18 @@ import Web3 from "web3";
 import erc721V3xAbi from "../../ContractABI/v3xcollectionAbi.json"
 import Modal from '../../components/Modal'
 import {AiOutlineCloseCircle } from "react-icons/ai"
+import toast, { Toaster } from 'react-hot-toast';
+import { collection, setDoc,doc,getDoc,addDoc} from  'firebase/firestore'
+import { db } from '../../firebase';
 const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
-export const marketplace_contract_Address="0x052846593585a705c40278C0c1D096926d888217"
-export const collection_contract_Address="0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5"
+export const marketplace_contract_Address="0x83297Ec9e277F712871CbB3012FDDae3b3E6D7c4"
+export const collection_contract_Address="0x1707bF4593729Cf7D52953590c70Ae2D40cC82AE"
 
 
 export default function CreateNft() {
 
-    const web3 = new Web3(window.ethereum)
+    
     const privateKey =useRecoilValue(PkState)
     const account=useRecoilValue(AccountState)
     const pk = new PrivateKey(new HttpProvider('https://api.s0.b.hmny.io'), privateKey,2)
@@ -29,16 +32,29 @@ export default function CreateNft() {
       src: "",
       alt: "upload an image",
     });
-  const [tokenid,setID]=useState("")
+
+    const web3 = new Web3(window.ethereum)
+    const CollectionContract = new web3.eth.Contract(
+      erc721V3xAbi,
+      "0xB3F83F090856e1cb7ae3c1fb4426757C6Caeed7a"
+    )
+    const marketContract = new web3.eth.Contract(
+      marketPlaceAbi,
+      "0x11f1eF9fcf19C74f3e05e0f3560e4875E7aa2489"
+    )
+
+
+  const [tokenid,setID]=useState("1")
+  const [itemid,setItemID]=useState("1")
   const [itemName,setName]=useState("")
   const [collectionName,setCName]=useState("")
   const [price,setPrice]=useState("")
-  const [contractAddress,setAddress]=useState("0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5")
+  const [contractAddress,setAddress]=useState("0xB3F83F090856e1cb7ae3c1fb4426757C6Caeed7a")
   const [itemDescription,setDescription]=useState("")
   const [trigger,setTrigger] =useState(false)
   const [supply,setSupply] =useState("")
   const [Royalty,setRoyalty] =useState("")
- 
+  const [ImgUrl,setImgUrl]=useState("")
   const options={
     gasPrice:new Unit("100").asGwei().toWei(),
     gasLimit:3500000
@@ -46,14 +62,12 @@ export default function CreateNft() {
   const NftMarketplaceContract = new HRC721(marketplace_contract_Address,marketPlaceAbi,pk)
   const NftCollectionContract = new HRC721(contractAddress,erc721V3xAbi,pk)
   
-  const marketPlaceContract = new web3.eth.Contract(
-   erc721V3xAbi,
-   contractAddress
-)
+
   const listNft=async()=>{
      const id =Number(tokenid)
      const itemPrice=Number(price)
      const fee =Number(Royalty)
+     toast("Processing: Listing NFT")
     try{
        
        const tx = await NftMarketplaceContract.send("makeItem", [contractAddress,id,itemPrice],
@@ -62,12 +76,32 @@ export default function CreateNft() {
          gasLimit:3500000,
          value: toWei(fee, 'one')
        }
-      
+       
        )
    
      console.log(tx,"ttttttttt")
+     toast(`Transaction successful
+     Transaction Hash: ${tx.receipt?.transactionHash}
+      `)
+      // marketContract.events.Offered({})
+      //   .on("data",event=>console.log(event,"evvv"))
+      const docRef = await addDoc(collection(db, "collections"), {
+          title:itemName,
+          tokenid:tokenid,
+          itemid:itemid,
+          contractAddress:contractAddress,
+          imgUrl:ImgUrl,
+          owner:account,
+           price:price,
+          date:Number(Date.now()),
+          description:itemDescription
+        
+         });
+         console.log( docRef)
+     
       }catch(e){
        console.log(e)
+       toast(e.message)
        }   
 
 
@@ -77,15 +111,23 @@ export default function CreateNft() {
    
     const amount =Number(supply)
     console.log(amount,"aaaa")
+    toast("Processing: Minting NFT")
 
     
     try{
       
       const tx = await NftCollectionContract.send("mintNft", [account,amount],options )
-     
+       
       console.log(tx,"ttttttttt")
+      toast(`Transaction successful
+      Transaction Hash: ${tx.receipt?.transactionHash}
+       `)
+
+      //  CollectionContract.events.TokenID({})
+      //  .on("data",event=>console.log(event))
       }catch(e){
       console.log(e)
+      toast(e.message)
       }   
 
 
@@ -106,20 +148,22 @@ export default function CreateNft() {
        </main>
        <main className='pt-8'>
           <div className='flex flex-col space-y-2'>
-             <label className="text-slate-400">Name*</label>
+             <label className="text-slate-400">Collection Name*</label>
              <input 
                className='input-color py-2 text-slate-600 px-4 rounded-sm  outline-none' 
-                placeholder='Item Name'
+                placeholder='Your collection name'
                 onChange={(e)=>setName(e.target.value)}
              />
           </div>
 
           <div className='flex flex-col space-y-2 pt-8'>
-             <label className="text-slate-400">External Link</label>
+             <label className="text-slate-400">External Image Link</label>
              <input 
                className='input-color py-2 text-slate-600 px-4 rounded-sm  outline-none' 
-                placeholder='Your site'
-
+                placeholder='Image Link'
+                name="imgUrl"
+                value={ImgUrl}
+                onChange={(e)=>setImgUrl(e.target.value)}
              />
           </div>
 
@@ -131,14 +175,14 @@ export default function CreateNft() {
                 onChange={(e)=>setDescription(e.target.value)}
              />
           </div>
-          <div className='flex flex-col space-y-2 pt-8'>
+          {/* <div className='flex flex-col space-y-2 pt-8'>
              <label className="text-slate-400">Collection Name</label>
              <input 
                className='input-color py-2 text-slate-600 px-4 rounded-sm  outline-none' 
                 placeholder='Your collection Name'
                 onChange={(e)=>setCName(e.target.value)}
              />
-          </div>
+          </div> */}
 
           <div className='flex flex-col space-y-2 pt-8'>
              <label className="text-slate-400">Collection Contract Address</label>
@@ -155,14 +199,14 @@ export default function CreateNft() {
               }
              </main>
           </div>
-          <div className='flex flex-col space-y-2 pt-8'>
+          {/* <div className='flex flex-col space-y-2 pt-8'>
              <label className="text-slate-400">Token Id</label>
              <input 
                className='input-color py-2 text-slate-600 px-4 rounded-sm  outline-none' 
                 placeholder='Token ID'
                 onChange={(e)=>setID(e.target.value)}
              />
-          </div>
+          </div> */}
 
           <div className='flex flex-col space-y-2 pt-8'>
              <label className="text-slate-400">Royalty Fee</label>

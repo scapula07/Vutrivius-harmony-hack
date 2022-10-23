@@ -13,13 +13,16 @@ import { PrivateKey,HRC721  } from 'harmony-marketplace-sdk'
 import marketPlaceAbi from "../../ContractABI/marketplaceAbi.json"
 import { AccountState,PkState } from '../../recoilstate/globalState'
 import { useRecoilValue } from 'recoil'
+import erc721V3xAbi from "../../ContractABI/v3xcollectionAbi.json"
 import Modal from '../../components/Modal';
 import Checker from "../../assests/checker.png"
+import toast, { Toaster } from 'react-hot-toast';
 import {AiOutlineCloseCircle } from "react-icons/ai"
 const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
-export const marketplace_contract_Address="0x052846593585a705c40278C0c1D096926d888217"
-export const collection_contract_Address="0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5"
+
+export const marketplace_contract_Address="0x83297Ec9e277F712871CbB3012FDDae3b3E6D7c4"
+export const collection_contract_Address="0x1707bF4593729Cf7D52953590c70Ae2D40cC82AE"
 
 export default function Item() {
 
@@ -33,8 +36,68 @@ export default function Item() {
     const location =useLocation()
     const [locationState,setlocationState] = useState(location.state)
     const [trigger,setTrigger] =useState(false)
-    const [purchase,setPurchased] =useState(true)
+    const [purchase,setPurchased] =useState(false)
     const [token,setToken]=useState("")
+
+    const NftMarketplaceContract = new HRC721(marketplace_contract_Address,marketPlaceAbi,pk)
+   
+    
+
+    const purchaseItem=async()=>{
+      console.log(token)
+      if (token ==="") return  console.log("empty")
+      const feeOne =Number(locationState.item?.price)
+       if(token=="one"){
+          console.log("one")
+          try{
+            toast("Processing Transactions")
+            const tx = await NftMarketplaceContract.send("purchaseItemWithONE", [4],
+            {
+              gasPrice:new Unit("100").asGwei().toWei(),
+              gasLimit:3500000,
+              value: toWei(feeOne, 'one')
+            }
+           
+            )
+           
+          console.log(tx,"ttttttttt")
+          
+          console.log(tx,"ttttttttt")
+          toast(`Transaction successful
+          Transaction Hash: ${tx.receipt?.transactionHash}
+           `)
+          setToken("")
+          setPurchased(true)
+           }catch(e){
+            console.log(e)
+            }   
+     
+       }else{
+         console.log("v3t")
+         
+         try{
+            toast("Processing Transactions")
+            const feeOne =Number(locationState.item?.price)*4
+            const tx = await NftMarketplaceContract.send("purchaseItemWithToken", [1,feeOne ,"0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F"],
+            {
+              gasPrice:new Unit("100").asGwei().toWei(),
+              gasLimit:3500000,
+             
+            }
+            
+            )
+        
+          console.log(tx,"ttttttttt")
+          toast(`Transaction successful
+          Transaction Hash: ${tx.receipt?.transactionHash}
+           `)
+          setToken("")
+           }catch(e){
+            console.log(e)
+            }   
+     
+       }
+    }
   return (
    <>
     <div className='pt-24'>
@@ -142,8 +205,12 @@ export default function Item() {
            </div>
 
            <main className='w-full pt-4 '>
-             <button className='btn-color rounded-md w-full text-black py-1 flex justify-center space-x-4 items-center '>
-               <span>Complete purchase</span>
+             <button className='btn-color rounded-md w-full text-black py-1 flex justify-center space-x-4 items-center '
+              
+             >
+               <span
+                  onClick={purchaseItem}
+               >Complete purchase</span>
                <select name="cars" id="cars" className='text-xs text-slate-600 btn-color outline-none'
                  onChange={(e)=>setToken(e.target.value)}
                >
@@ -157,11 +224,12 @@ export default function Item() {
          }
 
          {purchase===true&&
-            <div>
-               <img src={Checker } className=""/>
-                <main>
-                   <button>View NFT</button>
-                   <button>Cancel</button>
+            <div className='flex flex-col items-center'>
+               <h5 className='stake-bg rounded-full w-12 h-12 flex justify-center items-center'><img src={Checker } className="w-10 h-10"/></h5>
+                <h5>Purchase Successful</h5>
+                <main className='flex flex-col pt-4 space-y-2 w-full px-6'>
+                   <button className="btn-color w-full rounded-lg py-1 text-black ">View NFT</button>
+                   <button className=''>Cancel</button>
                 </main>
             </div>
          }
