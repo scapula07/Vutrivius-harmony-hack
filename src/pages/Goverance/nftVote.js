@@ -102,7 +102,7 @@ const NftVote = () => {
      
       )
     
-      console.log(Number(txVrf).toString().slice(0,1))
+      console.log((txVrf).toString().slice(0,1))
       const num=Number(txVrf).toString().slice(0,1)
       toast(`VRF Number: ${num}`)
        
@@ -194,7 +194,7 @@ const NftVote = () => {
           </p>
           <div className="flex items-center">
             <input
-              type="number"
+              type="text"
               placeholder="Enter Amount"
               value={text}
               className="text-sm leading-4 focus:outline-none w-full pr-2 bg-[#29282E] px-3 py-4 rounded-lg border border-[#475467] mr-2 text-white"
@@ -214,10 +214,10 @@ const NftVote = () => {
               <label className="pt-4">
               
               <input
-                  type="number"
+                  type="text"
                   placeholder="Paste MarketPlace Contract Address"
                   name="collection"
-                  value={collection}
+                  value={collectionAddr}
                   className="text-sm leading-4 focus:outline-none w-full pr-2 bg-[#29282E] px-3 py-4 rounded-lg border border-[#475467] mr-2 text-white"
                   onChange={(e)=>setCollection(e.target.value)}
              />
@@ -226,7 +226,7 @@ const NftVote = () => {
             <label className="flex items-center pt-4">
               
               <input
-                  type="number"
+                  type="text"
                   placeholder="Item ID"
                   name="itemId"
                   value={itemId}
@@ -247,7 +247,7 @@ const NftVote = () => {
               <label className="pt-4">
               
               <input
-                  type="number"
+                  type="text"
                   placeholder="Paste NFT Collection Contract Address"
                   name="nftAddress"
                   value={nftAddress}
@@ -261,7 +261,7 @@ const NftVote = () => {
             <label className="flex items-center pt-4 ">
               
               <input
-                  type="number"
+                  type="text"
                   placeholder="Token ID"
                   name="TokenId"
                   value={TokenId}

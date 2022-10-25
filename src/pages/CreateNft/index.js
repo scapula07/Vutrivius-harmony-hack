@@ -44,8 +44,8 @@ export default function CreateNft() {
     )
 
 
-  const [tokenid,setID]=useState("1")
-  const [itemid,setItemID]=useState("1")
+  const [tokenid,setID]=useState("2")
+  const [itemid,setItemID]=useState("2")
   const [itemName,setName]=useState("")
   const [collectionName,setCName]=useState("")
   const [price,setPrice]=useState("")

@@ -51,7 +51,7 @@ export default function Item() {
           console.log("one")
           try{
             toast("Processing Transactions")
-            const tx = await NftMarketplaceContract.send("purchaseItemWithONE", [4],
+            const tx = await NftMarketplaceContract.send("purchaseItemWithONE", [2],
             {
               gasPrice:new Unit("100").asGwei().toWei(),
               gasLimit:3500000,
@@ -78,7 +78,7 @@ export default function Item() {
          try{
             toast("Processing Transactions")
             const feeOne =Number(locationState.item?.price)*4
-            const tx = await NftMarketplaceContract.send("purchaseItemWithToken", [1,feeOne ,"0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F"],
+            const tx = await NftMarketplaceContract.send("purchaseItemWithToken", [2,feeOne ,"0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F"],
             {
               gasPrice:new Unit("100").asGwei().toWei(),
               gasLimit:3500000,
