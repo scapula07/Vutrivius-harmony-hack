@@ -54,19 +54,19 @@ Vultrivius works on four smart contracts :
 
 
 
-1. A staking pool smart contract -an Erc20 contract implement the logic for users to stake,unstake,purchaseNft etc.
+2. A staking pool smart contract -an Erc20 contract implement the logic for users to stake,unstake,purchaseNft etc.
 
  our staking contract implement the *Harmony VRF* , which is used to generate random bytes onchain . The bytes generated is converted to an integer and used to select stakers from the pool.
  
   *contract Link* -<https://github.com/scapula07/Vutrivius-harmony-hack/blob/master/contracts/vultriviusStaking.sol>
   
-1. A governace token contract - a governace token is minted 1:1 to each user that staker ONE or V3T in our platform. This token is retrieved or used to unstake amd to vote during governace
+2. A governace token contract - a governace token is minted 1:1 to each user that staker ONE or V3T in our platform. This token is retrieved or used to unstake amd to vote during governace
 
 
  *contract Link* -<https://github.com/scapula07/Vutrivius-harmony-hack/blob/master/contracts/vultriviusGovernce.sol>
  
 
-1. NFT collection Contract
+3. NFT collection Contract
 
 
  *contract Link* -<https://github.com/scapula07/Vutrivius-harmony-hack/blob/master/contracts/ArchitectNftCollection.sol>
@@ -78,7 +78,7 @@ Vultrivius implements covalent APIs  :
 1. To fetch users token balances
 
 3d VR  Repo <https://github.com/scapula07/3d-models-vultrivius>
-
+   We use the Three.js engine to load models of architectural designs that can be optionally provided by Creators.
 
 
 
