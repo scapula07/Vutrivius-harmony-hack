@@ -76,7 +76,7 @@ Vultrivius implements covalent APIs  :
 1. To fetch users transactions on the dapp
 1. To fetch users token balances
 
-3d VR 
+3d VR  Repo <https://github.com/scapula07/3d-models-vultrivius>
 
 
 
