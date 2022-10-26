@@ -34,6 +34,7 @@ export default function Wallet() {
   const [balance, setBalance] = useState(null);
   // console.log('privatek',privatek)
 
+  console.log('account', account)
 
   const [trigger, setTrigger] = useState(false);
   const [showSendFundsModal, setShowSendFundsModal] = useState(false);
@@ -63,6 +64,14 @@ export default function Wallet() {
   //     ChainID.HmyTestnet,
   //   ),
   // );
+
+  useEffect(() => {
+    const getBalance = async () => {
+      const data = await fetch(`https://api.covalenthq.com/v1/1666700000/address/${account}/balances_v2/?&key=ckey_40ccf16cfbff468a8ea289c92df`)
+      console.log('data',data)
+    }
+    getBalance()
+  },[account])
   useEffect(() => {
     if (account) {
       hmy.blockchain
