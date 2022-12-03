@@ -22,12 +22,17 @@
 1. Stack Requirenments/ Technologies
 1. Dapp Architecture
 
+## Usage
+1. List,purchase and mint NFTs
+2. Join staking pools and earn rewards
+3. NFT airdrops
+
 
 ## Project Description
 
 Vultrivius is an NFT marketplace for architects to list Architectural designs or blueprints for sale in forms of NFT. Our platform enables creators/architects to list their NFTs in exchange for a royalty fee that will be specified or inputed by the creator.
 
-Buyers can purchase these NFTs in exchnage with the Harmony Native token(ONE) or with our custom token V3T.
+Buyers can purchase these NFTs in exchange with the Polygon Native token(ONE) or with our custom token V3T.
 
 ### Dapp features or Hack challange
 
@@ -40,8 +45,8 @@ Buyers can purchase these NFTs in exchnage with the Harmony Native token(ONE) or
 1. Firebase - database system
 1. Solidity - smart contracts on Harmony chain
 1. Three.js - for 3D modeling of NFT(buildings)
-1. Harmony marketplace sdk
-1. Harmony API
+
+1.Maticjs sdk - to implement the bridge for NFT across EVM chain
 1. Covalent API
 
 ## Dapp architecture
@@ -50,31 +55,31 @@ Vultrivius works on four smart contracts :
 
 1. A NFT marketplace smart contract - This contract implement the basic logic of our marketplace i.e listing ,purchase or sales of NFT
 
- *contract Link* -<https://github.com/scapula07/Vutrivius-harmony-hack/blob/master/contracts/vultriviusNftMarketpalce.sol>
+ *contract address* -
 
 
 
 2. A staking pool smart contract -an Erc20 contract implement the logic for users to stake,unstake,purchaseNft etc.
 
- our staking contract implement the *Harmony VRF* , which is used to generate random bytes onchain . The bytes generated is converted to an integer and used to select stakers from the pool.
+ our staking contract implement A * VRF* , which is used to generate random bytes onchain . The bytes generated is converted to an integer and used to select stakers from the pool.
  
-  *contract Link* -<https://github.com/scapula07/Vutrivius-harmony-hack/blob/master/contracts/vultriviusStaking.sol>
+  *contract Address* -
   
-2. A governace token contract - a governace token is minted 1:1 to each user that staker ONE or V3T in our platform. This token is retrieved or used to unstake amd to vote during governace
+2. A governace token contract - a governace token is minted 1:1 to each user that staker Matic or V3T in our platform. This token is retrieved or used to unstake amd to vote during governace
 
 
- *contract Link* -<https://github.com/scapula07/Vutrivius-harmony-hack/blob/master/contracts/vultriviusGovernce.sol>
+ *contract Link* -
  
 
 3. NFT collection Contract
 
 
- *contract Link* -<https://github.com/scapula07/Vutrivius-harmony-hack/blob/master/contracts/ArchitectNftCollection.sol>
+ *contract Link* -
  
  
 Vultrivius implements covalent APIs  :
 
-1. To fetch users transactions on the dapp <https://github.com/scapula07/Vutrivius-harmony-hack/blob/master/src/pages/Profile/transactions.js>
+1. To fetch users transactions on the dapp 
 1. To fetch users token balances
 
 3d VR  Repo <https://github.com/scapula07/3d-models-vultrivius>
